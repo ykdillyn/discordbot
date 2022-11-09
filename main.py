@@ -29,9 +29,9 @@ doglist = [
   "https://media.giphy.com/media/10YNI9aU5LQR68/giphy.gif"
 ]
 
+help = commands.DefaultHelpCommand(no_category='Commands')
 #add your prefix as an ! for your bot commands
-bot = commands.Bot(command_prefix='!dill', intents=intents)
-#awasda
+bot = commands.Bot(command_prefix='!dill', intents=intents, help=help)
 
 #print a message to the console when your bot is online
 @bot.event
@@ -40,12 +40,12 @@ async def on_connect():
 
 
 #
-@bot.command()
+@bot.command(brief='__Get greeted by dillbot__')
 async def hello(ctx):
   await ctx.reply("Hello from dillbot")
 
 
-@bot.command()
+@bot.command(brief='__WORK IN PROGRESS__')
 async def play(ctx):
   ship = '🚢'
   cross = '❌'
@@ -72,7 +72,7 @@ async def play(ctx):
 
 #use a Joke API to get a joke setup, wait a few seconds
 #and deliver the punchline
-@bot.command()
+@bot.command(brief='__Receive a joke__')
 async def joke(ctx):
   url = "https://official-joke-api.appspot.com/random_joke"
 
@@ -93,7 +93,7 @@ async def joke(ctx):
   await ctx.send(punchline)
 
 
-@bot.command()
+@bot.command(brief='__Enter a zip code and receive the weather and location__')
 async def weather(ctx, zip):
 
   my_secret_weather = os.environ['weatherapikey']
@@ -115,12 +115,12 @@ async def weather(ctx, zip):
   await ctx.send(F + "°F, " + desc + " in " + location)
 
 
-@bot.command()
+@bot.command(brief='__Recieve a random dog GIF__')
 async def dog(ctx):
   await ctx.reply(random.choice(doglist))
 
 
-@bot.command()
+@bot.command(brief='__Flip a coin__')
 async def flip(ctx):
   message = await ctx.reply(
     "https://media.tenor.com/bd3puNXKLwUAAAAC/coin-toss.gif")
@@ -129,8 +129,8 @@ async def flip(ctx):
   await ctx.reply(random.choice(coinlist))
 
 
-@bot.command()
-async def IPinfo(ctx, ip):
+@bot.command(brief='__Enter an IP address and receive the city, state, country, and timezone__')
+async def IP(ctx, ip):
   url = "https://ipinfo.io/" + ip + "/geo"
 
   req = requests.get(url)
@@ -146,7 +146,7 @@ async def IPinfo(ctx, ip):
                   country + "\nTimezone: " + timezone + ".")
 
 
-@bot.command()
+@bot.command(brief='__Enter an image and receive the same image with all faces blurred__')
 async def blur(ctx):
   printlist=["a", "b", "c", "d", "e","f", "g", "h", "i", "j","k", "l", "m", "n", "o","p", "q", "r", "s", "t","u", "v", "w", "x", "y", "z", "-", "/", "_", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", ":"]
   message = ctx.message

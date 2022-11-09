@@ -31,7 +31,7 @@ doglist = [
 
 #add your prefix as an ! for your bot commands
 bot = commands.Bot(command_prefix='!dill', intents=intents)
-
+#awasda
 
 #print a message to the console when your bot is online
 @bot.event

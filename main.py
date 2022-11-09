@@ -5,6 +5,10 @@ import requests
 import asyncio
 import keep_alive
 
+my_secret = os.environ['token']
+blur_api = os.environ['blurapi']
+my_secret_weather = os.environ['weatherapikey']
+
 from discord.ext import commands
 
 intents = discord.Intents.all()
@@ -60,7 +64,7 @@ async def play(ctx):
 
   battleship = await bot.wait_for("reaction_add", check=check)
 
-  battleship = await bot.wait_for("reaction_add", check=check)
+  cross = await bot.wait_for("reaction_add", check=check)
 
   if battleship:
     await asyncio.sleep(0.5)
@@ -95,8 +99,6 @@ async def joke(ctx):
 
 @bot.command(brief='Enter a zip code and receive the weather and location')
 async def weather(ctx, zip):
-
-  my_secret_weather = os.environ['weatherapikey']
 
   url = "https://api.openweathermap.org/data/2.5/weather?zip=" + zip + ",us&appid=" + my_secret_weather
 
@@ -155,7 +157,7 @@ async def blur(ctx):
   url = "https://api.apilayer.com/face_pixelizer/url?url=" + img
 
   payload = {}
-  headers = {"apikey":"Sz8div64BU43dql72fPmqcxMkGbJWQRJ"}
+  headers = {"apikey":blur_api}
 
   response = requests.request("GET", url, headers=headers, data=payload)
   result = response.text
@@ -166,5 +168,4 @@ async def blur(ctx):
   await ctx.reply(result2[7:])
 
 keep_alive.keep_alive()
-my_secret = os.environ['token']
 bot.run(my_secret)

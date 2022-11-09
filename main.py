@@ -40,12 +40,12 @@ async def on_connect():
 
 
 #
-@bot.command(brief='__Get greeted by dillbot__')
+@bot.command(brief='Get greeted by dillbot')
 async def hello(ctx):
   await ctx.reply("Hello from dillbot")
 
 
-@bot.command(brief='__WORK IN PROGRESS__')
+@bot.command(brief='WORK IN PROGRESS')
 async def play(ctx):
   ship = '🚢'
   cross = '❌'
@@ -72,7 +72,7 @@ async def play(ctx):
 
 #use a Joke API to get a joke setup, wait a few seconds
 #and deliver the punchline
-@bot.command(brief='__Receive a joke__')
+@bot.command(brief='Receive a joke')
 async def joke(ctx):
   url = "https://official-joke-api.appspot.com/random_joke"
 
@@ -93,7 +93,7 @@ async def joke(ctx):
   await ctx.send(punchline)
 
 
-@bot.command(brief='__Enter a zip code and receive the weather and location__')
+@bot.command(brief='Enter a zip code and receive the weather and location')
 async def weather(ctx, zip):
 
   my_secret_weather = os.environ['weatherapikey']
@@ -115,12 +115,12 @@ async def weather(ctx, zip):
   await ctx.send(F + "°F, " + desc + " in " + location)
 
 
-@bot.command(brief='__Recieve a random dog GIF__')
+@bot.command(brief='Recieve a random dog GIF')
 async def dog(ctx):
   await ctx.reply(random.choice(doglist))
 
 
-@bot.command(brief='__Flip a coin__')
+@bot.command(brief='Flip a coin')
 async def flip(ctx):
   message = await ctx.reply(
     "https://media.tenor.com/bd3puNXKLwUAAAAC/coin-toss.gif")
@@ -129,7 +129,7 @@ async def flip(ctx):
   await ctx.reply(random.choice(coinlist))
 
 
-@bot.command(brief='__Enter an IP address and receive the city, state, country, and timezone__')
+@bot.command(brief='Enter an IP address and receive the city, state, country, and timezone')
 async def IP(ctx, ip):
   url = "https://ipinfo.io/" + ip + "/geo"
 
@@ -146,7 +146,7 @@ async def IP(ctx, ip):
                   country + "\nTimezone: " + timezone + ".")
 
 
-@bot.command(brief='__Enter an image and receive the same image with all faces blurred__')
+@bot.command(brief='Enter an image and receive the same image with all faces blurred')
 async def blur(ctx):
   printlist=["a", "b", "c", "d", "e","f", "g", "h", "i", "j","k", "l", "m", "n", "o","p", "q", "r", "s", "t","u", "v", "w", "x", "y", "z", "-", "/", "_", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", ":"]
   message = ctx.message

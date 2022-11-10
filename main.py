@@ -1,5 +1,6 @@
 import os
 import discord
+from discord.ui import Button, View
 import random
 import requests
 import asyncio
@@ -51,28 +52,25 @@ async def hello(ctx):
 
 @bot.command(brief='WORK IN PROGRESS')
 async def play(ctx):
-  ship = '🚢'
-  cross = '❌'
-  reactlist = [ship, cross]
-  message = await ctx.reply(
-    "What Game Would You Like to Play? \n:ship: Battleship")
-  await message.add_reaction(ship)
-  await message.add_reaction(cross)
+  
+  battleship_button = Button(label="Battleship", style = discord.ButtonStyle.green, emoji = "🚢")
+  cancel_button = Button(label="Cancel", style = discord.ButtonStyle.red, emoji = "❌")
 
-  def check(reaction, user):
-    return user == ctx.author and str(reaction.emoji) in reactlist
-
-  battleship = await bot.wait_for("reaction_add", check=check)
-
-  cross = await bot.wait_for("reaction_add", check=check)
-
-  if battleship:
-    await asyncio.sleep(0.5)
+  async def battleship(interaction):
     await message.delete()
-    await ctx.reply("@ the person you would like to challenge")
-  elif cross:
+    await ctx.send("@ the person you would like to play")
+
+  async def cancel(interaction):
     await message.delete()
 
+  battleship_button.callback=battleship
+  cancel_button.callback=cancel
+
+  view=View()
+  view.add_item(battleship_button)
+  view.add_item(cancel_button)
+
+  message = await ctx.send("What game would you like to play?", view=view)
 
 #use a Joke API to get a joke setup, wait a few seconds
 #and deliver the punchline

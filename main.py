@@ -6,10 +6,6 @@ import random
 import requests
 import asyncio
 import keep_alive
-from grid4 import gridfour
-from grid3 import gridthree
-from grid2 import gridlist2
-from grid1 import gridlist
 intents = discord.Intents.all()
 intents.members = True
 
@@ -57,7 +53,18 @@ async def hello(ctx):
 
 @bot.command(brief='WORK IN PROGRESS')
 async def bship(ctx, p2: discord.Member):
-  movelist=["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "I1", "I2", "I3", "I4", "I5", "I6", "I7", "I8", "I9", "I10", "J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8", "J9", "J10"]
+  movelist=["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "A9", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "A10", "B10", "C10", "D10", "E10", "F10", "G10", "H10", "I10", "J10"]
+  option1 = open("option1.txt", "r")
+  option2 = open("option2.txt", "r")
+  option3 = open("option3.txt", "r")
+  option4 = open("option4.txt", "r")
+  option5 = open("option5.txt", "r")
+  option6 = open("option6.txt", "r")
+  option7 = open("option7.txt", "r")
+  option8 = open("option8.txt", "r")
+  option9 = open("option9.txt", "r")
+  option10 = open("option10.txt", "r")
+  gridlist=[option1, option2, option3, option4, option5, option6, option7, option8, option9, option10]
   confirm_button = Button(label="Confirm", style = discord.ButtonStyle.green, emoji = "✔️")
   cancel_button = Button(label="Cancel", style = discord.ButtonStyle.red, emoji = "❌")
   p1 = ctx.author
@@ -65,12 +72,17 @@ async def bship(ctx, p2: discord.Member):
   view.add_item(confirm_button)
   view.add_item(cancel_button)
 
-  async def randgrid(user, list, map):
-    x = random.randint(0,4)
-    map = list[x]
-    await user.send(map)
+  # def check(user):
+  #   def inner_check(message):
+  #     if message.author == 
+    
+
+  async def randgrid(user, map):
+    x = random.randint(0,9)
+    map = gridlist[x]
+    await user.send(map.read())
     print(x)
-    print(map)
+    print(map.read())
 
   async def game():
     turn = random.randint(0,1)
@@ -91,11 +103,11 @@ async def bship(ctx, p2: discord.Member):
     await p2.send("BATTLESHIP GAME AGAINST " + str(p1))
     gridthree = open("gridthree.txt", "r")
     await p2.send(gridthree.read())
-    await randgrid(p2, gridlist, map1)
+    await randgrid(p2, map1)
     await p1.send("BATTLESHIP GAME AGAINST " + str(p2))
     gridfour = open("gridfour.txt", "r")
     await p1.send(gridfour.read())
-    await randgrid(p1, gridlist2, map2)
+    await randgrid(p1, map2)
     await game()
     
 

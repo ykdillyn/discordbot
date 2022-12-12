@@ -1,6 +1,6 @@
 import os
 import discord
-from discord.ui import Button, View
+from discord.ui import Button, Select, View
 from discord.ext import commands
 import random
 import requests
@@ -13,7 +13,7 @@ p1=""
 p2=""
 turn=""
 
-my_secret = os.environ['token']
+token = os.environ['token']
 blur_api = os.environ['blurapi']
 my_secret_weather = os.environ['weatherapikey']
 
@@ -71,45 +71,226 @@ async def bship(ctx, p2: discord.Member):
   view=View()
   view.add_item(confirm_button)
   view.add_item(cancel_button)
-
-  # def check(user):
-  #   def inner_check(message):
-  #     if message.author == 
     
 
-  async def randgrid(user, map):
-    x = random.randint(0,9)
-    map = gridlist[x]
-    await user.send(map.read())
+  async def randgrid():
+    # x = random.randint(0,9)
+    # map = gridlist[x]
+    # map = map.read()
+    # await user.send(map)
+    # print(x)
+    global map1
+    global map2
+    x= random.randint(0,9)
+    map1 = gridlist[x]
+    map1 = map1.read()
+    await p1.send(map1)
     print(x)
-    print(map.read())
+    y=random.randint(0,9)
+    map2 = gridlist[y]
+    map2 = map2.read()
+    await p2.send(map2)
+    print(y)
+
+  def removebreak(maplist):
+    for x in range(9):
+      maplist.remove("\n")
 
   async def game():
+    fire_button = Button(label="Fire", style = discord.ButtonStyle.green, emoji = "💣")
+    view3=View()
+    view3.add_item(fire_button)
+    async def fire(interaction):
+      if turn == 0:
+        await r1.delete()
+        await c1.delete()
+      elif turn == 1:
+        await r2.delete()
+        await c2.delete()
+      await fire.delete()
+
+    fire_button.callback=fire
+
+    global location
+    global location2
+    global location3
+    
+    location=0
+    location2=0
+    location3=0
+    select = Select(
+      options=[
+      discord.SelectOption(
+        label="A", 
+      ),
+      discord.SelectOption(
+        label="B",
+      ),
+      discord.SelectOption(
+        label="C",
+      ),
+      discord.SelectOption(
+        label="D",
+      ),
+      discord.SelectOption(
+        label="E",
+      ),
+      discord.SelectOption(
+        label="F",
+      ),
+      discord.SelectOption(
+        label="G",
+      ),
+      discord.SelectOption(
+        label="H",
+      ),
+      discord.SelectOption(
+        label="I",
+      ),
+      discord.SelectOption(
+        label="J",
+      )
+    ])
+
+    select2 = Select(
+      options=[
+      discord.SelectOption(
+        label="1", 
+      ),
+      discord.SelectOption(
+        label="2",
+      ),
+      discord.SelectOption(
+        label="3",
+      ),
+      discord.SelectOption(
+        label="4",
+      ),
+      discord.SelectOption(
+        label="5",
+      ),
+      discord.SelectOption(
+        label="6",
+      ),
+      discord.SelectOption(
+        label="7",
+      ),
+      discord.SelectOption(
+        label="8",
+      ),
+      discord.SelectOption(
+        label="9",
+      ),
+      discord.SelectOption(
+        label="10",
+      )
+    ])
+
+    async def callback(interaction):
+      if select.values[0] == "A":
+        location=0
+        location=1
+      if select.values[0] == "B":
+        location=0
+        location=2
+      if select.values[0] == "C":
+        location=0
+        location=3
+      if select.values[0] == "D":
+        location=0
+        location=4
+      if select.values[0] == "E":
+        location=0
+        location=5
+      if select.values[0] == "F":
+        location=0
+        location=6
+      if select.values[0] == "G":
+        location=0
+        location=7
+      if select.values[0] == "H":
+        location=0
+        location=8
+      if select.values[0] == "I":
+        location=0
+        location=9
+      if select.values[0] == "J":
+        location=0
+        location=10
+      print(location)
+      await interaction.response.defer()
+
+    async def callbacktwo(interaction):
+      if select2.values[0] == "1":
+        location2=0
+      if select2.values[0] == "2":
+        location2=0
+        location2=10
+      if select2.values[0] == "3":
+        location2=0
+        location2=20
+      if select2.values[0] == "4":
+        location2=0
+        location2=30
+      if select2.values[0] == "5":
+        location2=0
+        location2=40
+      if select2.values[0] == "6":
+        location2=0
+        location2=50
+      if select2.values[0] == "7":
+        location2=0
+        location2=60
+      if select2.values[0] == "8":
+        location2=0
+        location2=70
+      if select2.values[0] == "9":
+        location2=0
+        location2=80
+      if select2.values[0] == "10":
+        location2=0
+        location2=90
+      print(location2)
+      await interaction.response.defer()
+    select.callback = callback
+    select2.callback = callbacktwo
+    view=View()
+    view2=View()
+    view.add_item(select)
+    view2.add_item(select2)
+
+    
     turn = random.randint(0,1)
     if turn == 0:
       await p2.send(str(p1) + " TURN")
-      await p1.send("YOUR TURN")
+      c1 = await p1.send("**CHOOSE A COLUMN**", view=view)
+      r1 = await p1.send("**CHOOSE A ROW**", view=view2)
+      fire = await p1.send("--------------------------------------", view=view3)
+      
+      
     elif turn == 1:
-      await p2.send("YOUR TURN")
       await p1.send(str(p2) + " TURN")
-    
-
-
+      c2 = await p2.send("**CHOOSE A COLUMN**", view=view)
+      r2 = await p2.send("**CHOOSE A ROW**", view=view2)
+      fire = await p2.send("--------------------------------------", view=view3)
+      
   message = await p2.send( "Battleship game with " + str(p1) + " ?", view=view)
   async def confirm(interaction):
-    map1=""
-    map2=""
     await message.delete()
     await p2.send("BATTLESHIP GAME AGAINST " + str(p1))
-    gridthree = open("gridthree.txt", "r")
-    await p2.send(gridthree.read())
-    await randgrid(p2, map1)
     await p1.send("BATTLESHIP GAME AGAINST " + str(p2))
-    gridfour = open("gridfour.txt", "r")
-    await p1.send(gridfour.read())
-    await randgrid(p1, map2)
+    await randgrid()
+    gridtwo = open("gridtwo.txt", "r")
+    await p2.send(gridtwo.read())
+    gridone = open("gridone.txt", "r")
+    await p1.send(gridone.read())
+    map1list = list(map1)
+    removebreak(map1list)
+    map2list = list(map2)
+    removebreak(map2list)
+    print(map1list)
+    print(map2list)
     await game()
-    
 
   async def cancel(interaction):
     await message.delete()
@@ -211,4 +392,5 @@ async def blur(ctx):
   await ctx.reply(result2[7:])
 
 keep_alive.keep_alive()
-bot.run(my_secret)
+
+bot.run(token)

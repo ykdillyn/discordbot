@@ -56,17 +56,6 @@ async def hello(ctx):
 
 @bot.command(brief='WORK IN PROGRESS')
 async def bship(ctx, p2: discord.Member):
-  movelist = [
-    "A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "A2", "B2",
-    "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "A3", "B3", "C3", "D3",
-    "E3", "F3", "G3", "H3", "I3", "J3", "A4", "B4", "C4", "D4", "E4", "F4",
-    "G4", "H4", "I4", "J4", "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5",
-    "I5", "J5", "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6",
-    "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "A8", "B8",
-    "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "A9", "B9", "C9", "D9",
-    "E9", "F9", "G9", "H9", "I9", "J9", "A10", "B10", "C10", "D10", "E10",
-    "F10", "G10", "H10", "I10", "J10"
-  ]
   option1 = open("option1.txt", "r")
   option2 = open("option2.txt", "r")
   option3 = open("option3.txt", "r")
@@ -107,32 +96,24 @@ async def bship(ctx, p2: discord.Member):
     await p2.send(map2)
     print(y)
 
-  def removebreak(maplist):
-    for x in range(9):
-      maplist.remove("\n")
-
   async def game():
+    global gridmsg1
+    global gridmsg2
+    global gridone
+    global gridtwo
+    global newgridone
+    global newgridtwo
+    global z
+    global ze
+    global turn
     fire_button = Button(label="Fire",
                          style=discord.ButtonStyle.green,
                          emoji="💣")
     view3 = View()
     view3.add_item(fire_button)
 
-    async def fire(interaction):
-      if turn == 0:
-        await r1.delete()
-        await c1.delete()
-      elif turn == 1:
-        await r2.delete()
-        await c2.delete()
-      await fire.delete()
-
-    fire_button.callback = fire
-
-    global location
-    global location2
-    global location3
-
+    z=0
+    ze=0
     location = 0
     location2 = 0
     location3 = 0
@@ -169,6 +150,15 @@ async def bship(ctx, p2: discord.Member):
     ])
 
     async def callback(interaction):
+      global gridmsg1
+      global gridmsg2
+      global gridone
+      global gridtwo
+      global newgridone
+      global newgridtwo
+      global z
+      global ze
+      global turn
       if select.values[0] == "A":
         location = 0
       elif select.values[0] == "B":
@@ -212,18 +202,61 @@ async def bship(ctx, p2: discord.Member):
         location2 = 99
       location3 = location + location2
       if turn == 0:
-        x = int(location3)
-        print(x)
-        newgridone = gridone[0:x]+gridone[x:].replace("⬛","❌",1)
+        z = int(location3)
+        print(z)
+        newgridone = gridone[0:z]+gridone[z:].replace("⬛","❌",1)
         print(newgridone)
         await gridmsg1.edit(content=newgridone)
       elif turn == 1:
-        x = int(location3)
-        print(x)
-        newgridtwo = gridtwo[0:x]+gridtwo[x:].replace("⬛","❌",1)
+        ze = int(location3)
+        print(ze)
+        newgridtwo = gridtwo[0:ze]+gridtwo[ze:].replace("⬛","❌",1)
         print(newgridtwo)
         await gridmsg2.edit(content=newgridtwo)
       await interaction.response.defer()
+
+    async def fire(interaction):
+      global gridmsg1
+      global gridmsg2
+      global gridone
+      global gridtwo
+      global newgridone
+      global newgridtwo
+      global z
+      global ze
+      global turn
+      if turn == 0:
+        newgridone = newgridone[0:z]+newgridone[z:].replace("❌","⬛",1)
+        if map2[z] == "🟦":
+          await r1.delete()
+          await c1.delete()
+          await fire.delete()
+          await p1.send("MISS")
+          newgridone = newgridone[0:z]+newgridone[z:].replace("⬛","⬜",1)
+          await gridmsg1.edit(content=newgridone)
+          turn = 1
+          await game()
+        elif map2[z] == "🚢":
+          await p1.send("HIT. GO AGAIN")
+          newgridone = newgridone[0:z]+newgridone[z:].replace("⬛","🟥",1)
+          await gridmsg1.edit(content=newgridone)
+      elif turn == 1:
+        newgridtwo = newgridtwo[0:z]+newgridtwo[z:].replace("❌","⬛",1)
+        if map1[ze] == "🟦":
+          await r2.delete()
+          await c2.delete()
+          await fire.delete()
+          await p2.send("MISS")
+          newgridtwo = newgridtwo[0:ze]+newgridtwo[ze:].replace("⬛","⬜",1)
+          await gridmsg2.edit(content=newgridtwo)
+          turn = 0
+          await game()
+        elif map1[ze] == "🚢":
+          await p2.send("HIT. GO AGAIN")
+          newgridtwo = newgridtwo[0:ze]+newgridtwo[ze:].replace("⬛","🟥",1)
+          await gridmsg2.edit(content=newgridtwo)
+
+    fire_button.callback = fire
 
     select.callback = callback
     select2.callback = callback
@@ -231,8 +264,7 @@ async def bship(ctx, p2: discord.Member):
     view2 = View()
     view.add_item(select)
     view2.add_item(select2)
-
-    turn = random.randint(0, 1)
+    
     if turn == 0:
       await p2.send(str(p1) + " TURN")
       c1 = await p1.send("**CHOOSE A COLUMN**", view=view)
@@ -250,14 +282,15 @@ async def bship(ctx, p2: discord.Member):
   message = await p2.send("Battleship game with " + str(p1) + " ?", view=view)
 
   async def confirm(interaction):
-    global gridonelist
-    global gridtwolist
-    global map1list
-    global map2list
     global gridmsg1
     global gridmsg2
     global gridone
     global gridtwo
+    global newgridone
+    global newgridtwo
+    global z
+    global ze
+    global turn
     await message.delete()
     await p2.send("BATTLESHIP GAME AGAINST " + str(p1))
     await p1.send("BATTLESHIP GAME AGAINST " + str(p2))
@@ -266,16 +299,9 @@ async def bship(ctx, p2: discord.Member):
     gridtwo = open("gridtwo.txt", "r")
     gridone=gridone.read()
     gridtwo=gridtwo.read()
-    gridonelist = list(gridone)
-    gridtwolist = list(gridtwo)
-    removebreak(gridonelist)
-    removebreak(gridtwolist)
     gridmsg1 = await p1.send(gridone)
     gridmsg2 = await p2.send(gridtwo)
-    map1list = list(map1)
-    removebreak(map1list)
-    map2list = list(map2)
-    removebreak(map2list)
+    turn = random.randint(0, 1)
     await game()
 
   async def cancel(interaction):
